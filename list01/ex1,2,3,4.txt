@@ -1,0 +1,40 @@
+1-
+	a- A=b
+	b- false
+	c- A=B
+	d- A=1+2
+	e- A=p(a,b)
+	f- false
+	g- A=a, B=b
+	h- false
+	i- false
+	j- false
+	k- A=f(b)
+
+2-
+	a- X=b, X=d, X=f
+	b- false
+	c- true
+	d- true
+	e- true
+	f- true
+	g- X=d
+	h- false
+
+3-
+	a- false
+	b- false
+	c- false
+	d- true
+	e- true
+	f- X=a; X=c; X=d; X=a; X=b; X=d
+	Como o prolog faz as consultas de acordo com a ordem das linhas e o s(X):-q(X). está em primeiro, essa consulta será feita antes da s(X):-p(X).
+
+4-
+	r(a,b) -> s(b,a)
+	X=a, Y=b, Z=a,
+	X=a, Y=b, Z=d,
+	X=a, Y=c, Z=a, 
+	X=a, Y=d, Z=a,
+	X=b, Y=a, Z=
+	RESPOSTA: X=a, Y=d, Z=a; Retrocede 3 vezes
