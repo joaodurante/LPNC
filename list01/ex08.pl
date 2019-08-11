@@ -9,7 +9,7 @@ distancia_sol(netuno, 2800).
 distancia_sol(plutonio, 4600).
 
 distancia_planetas(P1, P2, Dist):-
-	sun_distance(P1, Dist1),
-	sun_distance(P2, Dist2),
+	distancia_sol(P1, Dist1),
+	distancia_sol(P2, Dist2),
 	X is Dist1-Dist2,
 	Dist is X*(-1).
