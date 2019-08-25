@@ -1,0 +1,72 @@
+1-
+    deleteMember(_, [], []).
+    deleteMember(X, [X | Xx], Y) :-
+        deleteMember(X, Xx, Y), !.
+    deleteMember(X, [Z | Xx], [Z | Y]) :-
+        deleteMember(X, Xx, Y).
+
+2-
+    delete_item(_,[],[]).
+    delete_item(X,[X|T],R):- delete_item(X,T,R), !.
+    delete_item(X,[H|T],[H|R]) :- delete_item(X,T,R).
+
+    delete_duplicates([],[]).
+    delete_duplicates([H|T], [H|R]) :- 
+        member(H,T),!,
+        delete_item(H,T,R1),
+        delete_duplicates(R1,R).
+
+    delete_duplicates([H|T],[H|R]):-
+        delete_duplicates(T,R).
+
+3-
+    concat([],L,L).
+    concat([Head|Tail],L,[Head|L2]):-
+        concat(Tail,L,L2).
+
+4-
+    greater([R],R).
+    greater([C|L],R) :- 
+        greater(L,A),
+        (A > C -> R = A; R = C).
+
+5-
+    lesser([X],X).
+    lesser([X|Y],M):-
+        lesser(Y,N),
+        (X<N -> M=X; M=N).
+
+6-
+    add(X,[],[X]).
+    add(X,[Y|Tail],[Y|Tail1]):-
+        add(X,Tail,Tail1).
+
+    get_elem(_, _, []).
+    get_elem([Head|Tail], List, ResultList) :-
+        nth0(Head, List, Elem),
+        add(Elem, ResultList, New),
+        ResultList = New,
+        get_elem(Tail, List, ResultList).
+
+7-
+    insert_head(Elem, List, [Elem|List]).
+
+8-
+    insert_end(X, [], [X]).
+    insert_end(X, [Head | Tail], [Head | List]):-
+        insert_end(X, Tail, List).
+
+9-
+    insertAt(Elem,0,List,[Elem|List]).
+    insertAt(Elem,N,[E|List],[E|List2]):- 
+        N2 is N-1,
+        insertAt(Elem,N2,List,List2).
+
+10-
+    replace(_, _, [], []).
+    replace(X, Y, [X | Tail], [Y | Tail2]) :- 
+        replace(X, Y, Tail, Tail2).
+
+    replace(X, Y, [Head | Tail], [Head | Tail2]) :- 
+        Head \= X,
+        replace(X, Y, Tail, Tail2).
