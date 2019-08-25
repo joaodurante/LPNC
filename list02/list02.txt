@@ -1,9 +1,115 @@
 1-
-	a- false.
-	Como há um {not(deseja(X,Y))} negando resultados com X, que no caso é {gato} e em seguida um {gosta(gato,X)} usando gato, retorna false.
+	A- 
+		false. Pois {gato} � negado na primeira consulta e usado na segunda, retornando portanto o valor false.
 
-	b- X=rato.
-	{gosta(gato,X)} retorna X=rato, como {rato} não está presente na consulta {deseja(X,Y)}, retorna X=rato.
+	B- 
+		X= rato. Pois gosta(gato,X) retorna {rato} e o mesmo n�o est� presente em deseja(rato, Y)
 
 2-
-	
+	pais(etiopia).
+	pais(brasil).
+	pais(peru).
+	pais(colombia).
+	pais(portugal).
+	pais(china).
+	pais(espanha).
+	pais(franca).
+	pais(turquia).
+	pais(angola).
+
+	oceano(atlantico).
+	oceano(mediterraneo).
+	oceano(pacifico).
+
+	continente(europeu).
+	continente(asiatico).
+	continente(africano).
+	continente(americano).
+
+	fronteira(brasil, peru).
+	fronteira(colombia, pacifico).
+	fronteira(portugal, espanha).
+	fronteira(franca,espanha).
+	fronteira(brasil,colombia).
+	fronteira(peru,colombia).
+	fronteira(brasil,atlantico).
+	fronteira(portugal,atlantico).
+	fronteira(turquia,mediterraneo).
+	fronteira(angola,mediterraneo).
+	fronteira(china,pacifico).
+	fronteira(peru,pacifico).
+
+	loc(brasil, americano).
+	loc(colombia, americano).
+	loc(peru, americano).
+	loc(portugal,europeu).
+	loc(franca,europeu).
+	loc(espanha,europeu).
+	loc(alemanha,europeu).
+	loc(inglaterra,europeu).
+	loc(turquia,asiatico).
+	loc(china,asiatico).
+	loc(angola,africano).
+	loc(etiopia,africano).
+
+	clausula1(X):-
+		loc(X, europeu),
+		fronteira(X, Y),
+		oceano(Y).
+
+	clausula2(A,B):-
+		fronteira(A,B),
+		fronteira(A, OceanoA),
+		oceano(OceanoA),
+		fronteira(B, OceanoB),
+		oceano(OceanoB),
+		not(fronteira(A, OceanoB)),
+		not(fronteira(B, OceanoA)).
+
+	clausula3(A,B):-
+		loc(A, ContA),
+		loc(B, ContB),
+		fronteira(A, Oceano),
+		fronteira(B, Oceano),
+		ContA \= ContB.
+
+	A- 
+		X=portugal;
+
+	B- 
+		A=brasil, B=peru;
+		A=brasil, B=colombia;
+
+	C-
+		A=brasil, B=portugal;
+		A=colombia , B=china ;
+		A=peru , B=china ;
+		A=portugal , B=brasil ;
+		A=turquia , B=angola ;
+		A=china , B=colombia ;
+		A=china , B=peru ;
+		A=angola , B=turquia ;
+
+3-
+	primeiro_prato(salada_palmito, 2.0).
+	primeiro_prato(sopa_ervilha, 1.0).
+	primeiro_prato(salada_tomate, 2.0).
+	primeiro_prato(sopa_abobora, 3.0).
+
+	prato_principal(peixe, 4.6).
+	prato_principal(frango, 2.0).
+	prato_principal(picanha, 10.0).
+	prato_principal(costela, 6.0).
+
+	sobremesa(salada_frutas, 2.0).
+	sobremesa(gelatina, 1.0).
+	sobremesa(mousse, 3.0).
+	sobremesa(pudim, 4.0).
+
+	cardapio(PrimPrato, PratoPrinc, Sobr, Min, Max, Custo):-
+		primeiro_prato(PrimPrato, Valor1),
+		prato_principal(PratoPrinc, Valor2),
+		sobremesa(Sobr, Valor3),
+		Custo is Valor1 + Valor2 + Valor3,
+		Custo >= Min,
+		Custo =< Max.

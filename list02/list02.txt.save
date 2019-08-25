@@ -1,4 +1,0 @@
-1-
-	a- false.
-	Como há um not(deseja(X,Y)) negando X que no caso seria GATO e um gosta(gato,X) usando o GATO, retorna
-	
