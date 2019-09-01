@@ -24,8 +24,6 @@ imprime_lista(Tipos):-
     findall(X, barril(X,_,_), ListTipos),
     delete_duplicates(ListTipos, Tipos).
 
-sum([],0).
-
 sum([], 0).
 sum([H|T], N):-
     sum(T, X),

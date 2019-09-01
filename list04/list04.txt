@@ -1,0 +1,344 @@
+Nome: João Pedro De Munno Durante
+
+15-
+    barril(1,100,10).
+    barril(1,50,25).
+    barril(1,25,20).
+    barril(1,10,15).
+    barril(2,100,12).
+    barril(2,50,27).
+    barril(3,25,23).
+    barril(3,10,18).
+
+    delete_item(_,[],[]).
+    delete_item(X,[X|T],R):- delete_item(X,T,R), !.
+    delete_item(X,[H|T],[H|R]) :- delete_item(X,T,R).
+
+    delete_duplicates([],[]).
+    delete_duplicates([H|T], [H|R]) :- 
+        member(H,T),!,
+        delete_item(H,T,R1),
+        delete_duplicates(R1,R).
+
+    delete_duplicates([H|T],[H|R]):-
+        delete_duplicates(T,R).
+
+    imprime_lista(Tipos):-
+        findall(X, barril(X,_,_), ListTipos),
+        delete_duplicates(ListTipos, Tipos).
+
+    sum([], 0).
+    sum([H|T], N):-
+        sum(T, X),
+        N is X + H.
+
+    get_qtt(Qtt):-
+        findall(X, barril(_,_,X), QttList),
+        sum(QttList, Qtt).
+        
+
+
+    cervejaria :-
+        write('A cervejaria possui os seguintes TIPOS: '),
+        imprime_lista(Tipos),
+        write(Tipos),
+        nl,
+        write('Informe o VOLUME do barril: '),
+        read(Volume),
+        aggregate_all(count, barril(Count, Volume, _), Count),
+        write('Com esse volume de '),
+        write(Volume),
+        write(' temos: '),
+        write(Count),
+        write(' barris '),
+        nl,
+        write('A quantidade TOTAL de barris armazenados: '),
+        get_qtt(Qtt),
+        write(Qtt),write(' barris '),nl,
+        listing(barril).
+
+
+17-
+    calc(List, Average) :-
+        sum(List, Sum),
+        length(List, Count),
+        Average is Sum/Count.
+
+    sum([], 0).
+    sum([H|T], N):-
+        sum(T, X),
+        N is X + H.
+
+    insert_head(Elem, List, [Elem|List]).
+
+    average([],[],[]).
+    average([H1 | T1], [H2 | T2], AvgList):-
+        average(T1, T2, List),
+        calc([H1,H2], Avg),
+        insert_head(Avg, List, AvgList).
+        
+
+    higher_average([], [], 0, 0).
+    higher_average([HN | TN], [HA | TA], Name, Max) :-
+        higher_average(TN, TA, _, TMax),
+        HA > TMax,
+        Max is HA,
+        Name = HN.
+
+    higher_average([_ | TN], [HA | TA], Name, Max) :-
+        higher_average(TN, TA, TName, TMax),
+        HA =< TMax,
+        Max is TMax,
+        Name = TName.
+
+    print_all([], []).
+    print_all([HN | TN], [HA | TA]) :-
+        write(HN),
+        write(' com media '),
+        write(HA),
+        nl,
+        print_all(TN, TA).
+
+    progr(ListName, ListaP1, ListaP2):-
+        average(ListaP1, ListaP2, ListAverage),
+
+        higher_average(ListName, ListAverage, Name, Max),
+        write('O aluno que teve maior media foi: '),
+        write(Name), write(' com media '), write(Max), nl,
+
+        print_all(ListName,ListAverage).
+
+18-
+    calc(List, Weight, Avg) :-
+        sum(List, Sum),
+        length(List, Count),
+        Arit is Sum / Count,
+        Avg is Arit * Weight.
+
+    sum([], 0).
+    sum([H|T], N):-
+        sum(T, X),
+        N is X + H.
+
+    insert_head(Elem, List, [Elem|List]).
+
+    average([],[],_,[]).
+    average([H1 | T1], [H2 | T2], Weight, AvgList):-
+        average(T1, T2, Weight, List),
+        calc([H1,H2], Weight, Avg),
+        insert_head(Avg, List, AvgList).
+
+    lower_average([], [], 10, 10).
+    lower_average([HN | TN], [HA | TA], Name, Min) :-
+        lower_average(TN, TA, _, TMin),
+        HA < TMin,
+        Min is HA,
+        Name = HN.
+
+    lower_average([_ | TN], [HA | TA], Name, Min) :-
+        lower_average(TN, TA, TName, TMin),
+        HA >= TMin,
+        Min is TMin,
+        Name = TName.
+
+    print_all([], []).
+    print_all([HN | TN], [HA | TA]) :-
+        write(HN),
+        write(' com media '),
+        write(HA),
+        nl,
+        print_all(TN, TA).
+
+    progr(ListName, ListP1, ListP2, Weight):- 
+        average(ListP1, ListP2, Weight, ListAverage),
+
+        lower_average(ListName, ListAverage, Name, Min),
+        write('O aluno que teve menor media foi: '),
+        write(Name), write(' com media: '), write(Min), nl,
+
+        print_all(ListName, ListAverage). 
+
+19-
+    professor(jose, matematica).
+    professor(maria, geografia).
+    professor(chico, biologia).
+    professor(joao, ingles).
+    professor(ana, historia).
+    professor(jorge, filosofia).
+
+    disciplina(matematica, segunda-feira, 07, 12).
+    disciplina(geografia, terca-feira, 08, 13).
+    disciplina(filosofia, terca-feira, 13, 18).
+    disciplina(biologia, quarta-feira, 09, 14).
+    disciplina(ingles, quinta-feira, 10, 15).
+    disciplina(historia, sexta-feira, 11, 16).
+
+
+    dados_professor(Prof):-
+        professor(Prof, Disc),
+        disciplina(Disc, Dia, Inicio, Termino),
+        write('Professor: '), write(Prof),nl,
+        write('Disciplina: '), write(Disc), nl,
+        write('Dia da semana: '), write(Dia), nl,
+        write('Inicio: '), write(Inicio), write('. Termino: '), write(Termino).
+
+    dia_professor(Dia):-
+        disciplina(Disc, Dia, _, _),
+        professor(Prof, Disc),
+        write('Professor '), write(Prof), nl.
+
+    disciplina_professor(Prof):-
+        professor(Prof, Disc),
+        write(Disc).
+
+20-
+    estado('sao paulo', 45919049, 248222.362).
+    estado('minas gerais', 21168791, 586522.122).
+    estado('rio de janeiro', 17264943, 43780.172).
+    estado('bahia', 14873064, 564733.177).
+    estado('parana', 11433957, 199 307.922).
+    estado('rio grande do sul', 11377239, 281730.223).
+    estado('pernambuco', 9557071, 98311.616).
+    estado('ceara', 9132078, 148920.472).
+    estado('para', 8602865, 1247954.666).
+    estado('santa catarina', 7164788, 95736.165).
+    estado('maranhao', 7075181, 331937.450).
+    estado('goias', 7018354, 340111.783).
+    estado('amazonas', 4144597, 1559159.148).
+    estado('espirito santo', 4018650, 46095.583).
+    estado('paraiba', 4018127, 56585.000).
+    estado('rio grande do norte', 3506853, 52811.047).
+    estado('mato grosso', 3484466, 903366.192).
+    estado('alagoas', 3337357, 27778.506).
+    estado('piaui', 3273227, 251577.738).
+    estado('distrito federal', 3015268, 5779.999).
+    estado('mato grosso do sul', 2778986, 357145.532).
+    estado('sergipe', 2298696, 21915.116).
+    estado('rondonia', 1777225, 237590.547).
+    estado('tocantins', 1572866, 277720.520).
+    estado('acre', 881935, 164123.040).
+    estado('amapa', 845731, 142828.521).
+    estado('roraima', 605761, 224 300.506).
+
+    insert_head(Elem, List, [Elem|List]).
+
+    make_list(NameList, PopList, AreaList):-
+        estado(Name, Pop, Area),
+        insert_head(Name, X, NameList),
+        insert_head(Pop, Y, PopList),
+        insert_head(Area, Z, AreaList).
+
+
+    maior_estado([], [], 0, 0).
+    maior_estado([HN | TN], [HA | TA], Name, Max) :-
+        maior_estado(TN, TA, _, TMax),
+        HA > TMax,
+        Max is HA,
+        Name = HN.
+
+    maior_estado([_ | TN], [HA | TA], Name, Max) :-
+        maior_estado(TN, TA, TName, TMax),
+        HA =< TMax,
+        Max is TMax,
+        Name = TName.
+        
+
+    progr:-
+        make_list(NameList, PopList, AreaList),
+        maior_estado(NameList, AreaList, Name, Max),
+        write(Name).
+
+Cavalo-Xadrez-
+    resolva:-
+        estado_inicial(E),
+        busca([[ramo(raiz,E)]],Solucao),
+        imprima(Solucao).
+        busca([Solucao|_],Solucao):- atinge_meta(Solucao),!.
+        busca([T|Fila],Solucao):-
+        ache_todos(Extensao,estende_ate_filho(T,Extensao),Extensoes),
+        concatena(Fila,Extensoes,Fila_ext),
+        busca(Fila_ext,Solucao).
+        atinge_meta([ramo(_,M)|_]):-meta(M).
+        ache_todos(X,Y,Z):-findall(X,Y,Z),!.
+        ache_todos(_,_,[]).
+        estende_ate_filho([ramo(Ramo,N)|Trajetoria],
+        [ramo(Op,Filho),ramo(Ramo,N)|Trajetoria]):-
+        transforma(N,Filho,Op),
+        nao_produz_ciclos(Filho,Trajetoria).
+        nao_produz_ciclos(Estado,Trajetoria):-
+        not(pertence(ramo(_,Estado),Trajetoria)).
+        pertence(X,[X|_]):-!.
+        pertence(X,[_|Y]):- pertence(X,Y).
+        concatena([],X,X):-!.
+        concatena([X|Y],Z,[X|W]):-concatena(Y,Z,W).
+        imprima([ramo(raiz,Raiz)]):- !, write('Estado inicial: '),write(Raiz),write('.').
+        imprima([ramo(Ramo,Nodo)|R]):-
+        imprima(R),nl,
+        write(Ramo),write(' então, temos: '),nl,
+        write(Nodo),write('.').
+        /* PROBLEMA DO TABULEIRO */
+        estado_inicial([1,5]).
+        meta([4,5]).
+        transforma([1,5],[2,7], 'Cima-Direita').
+        transforma([2,7],[4,8], 'Cima-Direita').
+        transforma([4,8],[3,6], 'Baixo-Esquerda').
+        transforma([3,6],[5,5], 'Cima-Esquerda').
+        transforma([5,5],[6,7], 'Cima-Direita').
+        transforma([6,7],[8,8], 'Cima-Direita').
+        transforma([8,8],[7,6], 'Baixo-Esquerda').
+        transforma([7,6],[8,4], 'Cima-Esquerda').
+        transforma([8,4],[7,2], 'Baixo-Esquerda').
+        transforma([7,2],[5,1], 'Baixo-Esquerda').
+        transforma([5,1],[6,3], 'Cima-Direita').
+        transforma([6,3],[4,4], 'Baixo-Direita').
+        transforma([4,4],[3,2], 'Baixo-Esquerda').
+        transforma([3,2],[1,1], 'Baixo-Esquerda').
+        transforma([1,1],[2,3], 'Cima-Direita').
+        transforma([2,3],[4,2], 'Cima-Esquerda').
+        transforma([4,2],[2,1], 'Baixo-Esquerda').
+        transforma([2,1],[1,3], 'Baixo-Direita').
+        transforma([1,3],[3,4], 'Cima-Direita').
+        transforma([3,4],[5,3], 'Cima-Esquerda').
+        transforma([5,3],[6,1], 'Cima-Esquerda').
+        transforma([6,1],[8,2], 'Cima-Direita').
+        transforma([8,2],[7,4], 'Baixo-Direita').
+        transforma([7,4],[8,6], 'Cima-Direita').
+        transforma([8,6],[7,8], 'Baixo-Direita').
+        transforma([7,8],[5,7], 'Baixo-Esquerda').
+        transforma([5,7],[6,5], 'Cima-Esquerda').
+        transforma([6,5],[4,6], 'Baixo-Direita').
+        transforma([4,6],[3,8], 'Baixo-Direita').
+        transforma([3,8],[1,7], 'Baixo-Esquerda').
+        transforma([1,7],[3,3], 'Cima-Esquerda').
+        transforma([3,3],[1,4], 'Baixo-Direita').
+        transforma([1,4],[2,2], 'Cima-Esquerda').
+        transforma([2,2],[4,1], 'Cima-Esquerda').
+        transforma([4,1],[6,2], 'Cima-Direita').
+        transforma([6,2],[8,1], 'Cima-Esquerda').
+        transforma([8,1],[7,3], 'Baixo-Direita').
+        transforma([7,3],[5,4], 'Baixo-Direita').
+        transforma([5,4],[6,6], 'Cima-Direita').
+        transforma([6,6],[8,5], 'Cima-Esquerda').
+        transforma([8,5],[7,7], 'Baixo-Direita').
+        transforma([7,7],[5,8], 'Baixo-Direita').
+        transforma([5,8],[3,7], 'Baixo-Esquerda').
+        transforma([3,7],[1,8], 'Baixo-Direita').
+        transforma([1,8],[2,6], 'Cima-Esquerda').
+        transforma([2,6],[4,7], 'Cima-Direita').
+        transforma([4,7],[2,8], 'Baixo-Direita').
+        transforma([2,8],[1,6], 'Baixo-Esquerda').
+        transforma([1,6],[3,5], 'Cima-Esquerda').
+        transforma([3,5],[5,6], 'Cima-Direita').
+        transforma([5,6],[6,8], 'Cima-Direita').
+        transforma([6,8],[8,7], 'Cima-Esquerda').
+        transforma([8,7],[7,5], 'Cima-Esquerda').
+        transforma([7,5],[8,3], 'Cima-Esquerda').
+        transforma([8,3],[7,1], 'Cima-Esquerda').
+        transforma([7,1],[5,2], 'Baixo-Direita').
+        transforma([5,2],[6,4], 'Cima-Direita').
+        transforma([6,4],[4,3], 'Baixo-Esquerda').
+        transforma([4,3],[3,1], 'Baixo-Esquerda').
+        transforma([3,1],[1,2], 'Baixo-Direita').
+        transforma([1,2],[2,4], 'Cima-Direita').
+        transforma([2,4],[4,5], 'Cima-Direita').
+
