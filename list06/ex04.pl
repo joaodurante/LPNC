@@ -1,0 +1,1 @@
+memoriza(Pred) :- ( Fact, ! ; assertz(Fact) ).
