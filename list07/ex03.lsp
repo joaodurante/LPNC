@@ -7,7 +7,9 @@
 )
 
 (defun elevado (x y)
-    
+    (let ((result 1))
+    (dotimes (count y result)
+        (setf result (* x result))))
 )
 
 (defun multiplica (x y)
