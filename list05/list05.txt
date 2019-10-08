@@ -1,0 +1,108 @@
+Joao Pedro De Munno Durante
+
+EX 01-
+
+	# employee(#id: int, first_name: string, last_name: string, phone: int, address: string)
+	# project(#id: int, name: string, initial_date: date, end_date: date, #manager: int)
+	# member(#employee_id: int, #project_id: int)
+
+	employee(1, joao, durante, 1111111111, 'rua x').
+	employee(2, matheus, santos, 2222222222, 'rua y').
+	employee(3, jorge, pereira, 3333333333, 'rua z').
+	employee(4, maria, silva, 4444444444, 'rua w').
+
+	project(1, estrada, 01/04/2019, 06/09/2019, 1).
+	project(2, predio, 01/05/2019, 06/010/2019, 1).
+	project(3, casa, 01/05/2019, 06/11/2019, 3).
+	project(4, parque, 01/05/2019, 06/12/2019, 3).
+
+	member(1, 1).
+	member(1, 2).
+	member(2, 3).
+	member(3, 3).
+	member(3, 4).
+	member(4, 2).
+
+
+	# insert(employee, [1, 'joao', 'durante', 988504771, rua]) -> INSERE employee
+	insert(Table, Args, Term) :-
+	    Term =.. [Table|Args],
+	    assertz(Term).
+
+
+	# from( employee , Table , Query ) -> RETORNA TODOS employee
+	from( Functor , Table , Query ) :- 
+	    tabela( Table ),
+	    functor( Table , Functor , ArgC ),
+	    functor( Query , Functor , ArgC ).
+
+	ctr_set( Counter,Value ) :- recorded( Counter , _ , Ref ) , replace( Ref , Value ) .
+	ctr_set( Counter , Value ) :- recorda( Counter , Value , _ ) .
+	ctr_is( Counter , Value ) :- recorded( Counter , Value , _ ) .
+	ctr_inc( Counter , Value ) :- recorded( Counter , Value , Ref ) , C1 is Counter + 1 , replace( Ref , C1 ) .
+	ctr_dec( Counter , Value ) :- recorded( Counter , Value , Ref ) , C1 is Counter - 1 , replace( Ref , C1 ) .
+
+	test( X , Op , Val ) :- 
+	    Goal =.. [Op,X,Val],
+	    call( Goal ).
+
+
+
+	nth_arg( Arg , Table , N ) :-
+	    Table =.. Z,
+	    ctr_set( 0 , 0 ),
+	    nth_member( Arg , Z ),
+	    ctr_is( 0 , N ).
+
+	nth_member( X , [X| _ ] ).
+	nth_member( X , [ _ |Y] ) :-
+	    ctr_inc( 0 , _ ),
+	    nth_member( X, Y ).
+
+	do( ( Arg , Op , Val ) , Query ) :- 
+	    call( Query ),
+	    arg( Arg , Query , X ),
+	    test( X , Op , Val ),
+	    Query =.. [ _ |L],
+	    output( L ) , fail.
+	do( _ , _ ).
+
+	where( Functor , ( Arg , Op , Val ) , Query ) :- 
+	    from( Functor , Table , Query ),
+	    nth_arg( Arg , Table , Argnum ),
+	    do( ( Argnum , Op , Val ) , Query ).
+
+
+EX 02-
+
+	# canteiro(id, nome, luzdiaria, aguadiaria)
+	canteiro(1, canteiro1, 100.23, 50.36).
+	canteiro(2, canteiro2, 32.67, 54.21).
+	canteiro(3, canteiro3, 78.54, 21.98).
+	canteiro(4, canteiro4, 41.43, 54.65).
+
+	#funcionario(id, nome, idade)
+	funcionario(1, joao, 21).
+	funcionario(2, maria, 43).
+	funcionario(3, jose, 26).
+	funcionario(4, nelson, 67).
+
+	#planta(id, nome, luzdiaria, agua, peso)
+	planta(1, alface, 4.2, 0.5, 0.1)
+	planta(2, tomate, 5.2, 0.3, 0.2)
+	planta(3, rucula, 8.2, 0.2, 0.1)
+	planta(4, agriao, 6.2, 0.1, 0.1)
+
+	#colhido(colhidoID, plantaID, funcID, canteiroID, data, qtt, peso)
+	colhido(1, 1, 1, 1, 21/04/2019, 30, 3).
+	colhido(2, 2, 2, 2, 21/04/2019, 30, 6).
+	colhido(3, 3, 3, 3, 21/04/2019, 30, 3).
+	colhido(4, 4, 4, 4, 21/04/2019, 30, 3).
+
+	#plantio(plantioID, plantaID, funcID, canteiroID, data, semente)
+	plantio(1, 1, 1, 1, 21/04/2019, )
+	plantio(2, 2, 2, 2, 21/04/2019, )
+	plantio(3, 4, 3, 3, 21/04/2019, )
+	plantio(4, 4, 4, 4, 21/04/2019, )
+
+
