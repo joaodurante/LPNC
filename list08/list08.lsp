@@ -1,3 +1,7 @@
+;; LISTA LISP - Aula Pratica 09
+;; João Pedro De Munno Durante
+
+;; Retirar todas as ocorrências de um elemento de uma lista: 
 (defun ocorrencia (Elemento Lista)
 	(if (null Lista)
 	    nil
@@ -7,6 +11,7 @@
 		      (ocorrencia Elemento (cdr Lista))))))
 
 
+;; Retirar elementos repetidos de uma lista. 
 (defun repetidos (Lista)
     (if (null Lista) nil
         (cons (car Lista)
@@ -15,7 +20,7 @@
     )
 )
 
-
+;; Concatenar duas listas quaisquer
 (defun concatenar (Lista1 Lista2)
     (if (null Lista1) Lista2
         (cons (first Lista1)
@@ -24,7 +29,7 @@
     )
 )
 
-
+;; Encontrar o maior elemento de uma lista numérica. 
 (defun maior (Lista)
     (if (null Lista) 
 	    nil
@@ -52,7 +57,7 @@
     )
 )
 
-
+;; Encontrar o menor elemento de uma lista numérica. 
 (defun acrescenta (Y X Lista)
 	(if (null Lista) nil
 	    (if (= X (car Lista))
@@ -60,6 +65,7 @@
 		(cons (first Lista) (acrescenta Y X (rest Lista))))))
 
 
+;; Pegar a posição de um elemento na lista, dado o elemento e a lista 
 (defun posicao (Elemento Lista)
     (if (null Lista) nil
         (if (= Elemento (first Lista)) 1
@@ -68,18 +74,38 @@
     )
 )
 
+;; Inserir elemento na primeira posição de uma lista
 (defun inserir_inicio (Elemento Lista)
     (if (null Lista) Elemento
         (cons Elemento Lista)
     )
 )
 
+;; Inserir elemento na última posição de uma lista. 
 (defun inserir_final (Elemento Lista)
     (if (null Lista) Elemento
-        (cons (car Lista)(inserir_final Elemento (cdr Lista)))
+        (reverse (cons Elemento (reverse Lista)))
     )
 )
 
+;; Inserir elemento numa posição N da lista.
+(defun inserir_posicao_n (Elemento Posicao Lista)
+    (if (= Posicao (size Lista))
+        (inserir_final Elemento Lista)
+        (inserir Elemento Posicao Lista 0)
+    )
+)
+
+(defun inserir (Elemento Posicao Lista Contador)
+    (if (null Lista) nil
+        (if (= Posicao Contador)
+            (concatenar (list Elemento (car Lista)) (cdr Lista))
+            (cons (car Lista) (inserir Elemento Posicao (cdr Lista) (1+ Contador)))
+        )
+    )
+)
+
+;; Substituir um elemento de uma lista por outro elemento
 (defun substituir_elemento (Elemento Novo Lista)
     (if (null Lista) nil
         (if (= elemento (first Lista))
@@ -89,6 +115,7 @@
     )
 )
 
+;; Duplicar elementos de uma lista. 
 (defun duplicar (Lista)
     (if (null Lista) nil
         (concatenar Lista Lista)
@@ -101,10 +128,12 @@
     )
 )
 
+;; Contar ocorrências de um elemento na lista 
 (defun contar_ocorrencia (Elemento Lista)
     (- (size Lista) (size (ocorrencia Elemento Lista)))
 )
 
+;; Acrescenta elemento Y depois do elemento X na lista
 (defun  acrescenta_Y (Y X Lista)
     (if (null Lista) nil
         (if (= X (first Lista)) (concatenar (list X Y) (rest Lista))
@@ -113,6 +142,7 @@
     )
 )
 
+;; Trocar o valor do n-ésimo elemento de uma lista por outro elemento 
 (defun trocar_elemento_nesimo (Novo N Contador Lista)
     (if (null Lista) nil
         (if (= Contador N)
@@ -122,12 +152,17 @@
     )
 )
 
+;; Calcular a media de duas listas 
 (defun media (Lista1 Lista2)
-    
+    (/ (+ (media_lista Lista1) (media_lista Lista2)) 2)
 )
 
 (defun soma (Lista)
     (if (null Lista) 0
-        (cons )
+        (+ (first Lista) (soma (rest Lista)))
     )
+)
+
+(defun media_lista (Lista)
+    (/ (soma Lista) (size Lista))
 )
