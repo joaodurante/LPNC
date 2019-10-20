@@ -1,3 +1,6 @@
+;; Lista 10 LISP - 2019
+;; João Pedro De Munno Durante
+
 ;; 01 - Função que dado um argumento, faça a identificação se ele é um atomo, caracter, string, numero (complexo, real, racional, float, int) ou lista
 (defun verifica_tipo(x)
     (cond
@@ -51,20 +54,7 @@
     )
 )
 
-;; 05 - 
-(defun baskhara (&key a b c)
-    (if(zerop a) (/ (- c) b)
-    (
-        let ((var (- (raised b)(* 4 a c))))
-        (unless (minusp var)(
-            let((root(sqrt var)))
-            (format t "x1 = ~$ ~%" (/(-(- b)root)(* 2 a))) 
-            (format t "x2 = ~$ ~%" (/(+(- b)root)(* 2 a)))
-        ))
-    ))
-)
-
-;; 06 -
+;; 05 - Calcule as raízes de uma equação de 2o grau completa: ax2 + bx + c, onde o usuário precisa passar os valores de a, b e c (com a, b e c diferentes de zero). Use a fórmula de Bhaskara. Só considere raízes reais (não complexas)
 (defun baskhara (a b c)
     (if(zerop a) (/ (- c) b)
     (
@@ -77,8 +67,8 @@
     ))
 )
 
-;; 07 - 
-(defun baskhara (&optional (a 0) (b 0) (c 0))
+;; 06 -Altere o exercício sobre raízes da equação quadrática completa, considerando a possibilidade do usuário especificar a ordem que vai entrar com os valores para a, b e c. (use &key)
+(defun baskhara_key (&key a b c)
     (if(zerop a) (/ (- c) b)
     (
         let ((var (- (raised b)(* 4 a c))))
@@ -90,17 +80,80 @@
     ))
 )
 
+;; 07 - Altere o exercício sobre raízes da equação quadrática, considerando que os valores de a, b e c são opcionais. Se eles não forem dados pelo usuário, assuma-os com valores iguais a zero (use &optional). 
+(defun baskhara_opt (&optional (a 0) (b 0) (c 0))
+    (if(zerop a) (/ (- c) b)
+    (
+        let ((var (- (raised b)(* 4 a c))))
+        (unless (minusp var)(
+            let((root(sqrt var)))
+            (format t "x1 = ~$ ~%" (/(-(- b)root)(* 2 a))) 
+            (format t "x2 = ~$ ~%" (/(+(- b)root)(* 2 a)))
+        ))
+    ))
+)
+
+;; 08 - Altere o exercício sobre raízes da equação quadrática, considerando que o usuário pode entrar com a; a e b; a e b e c (use & rest). 
+(defun baskhara_rest (a &rest resto)
+    (if (null resto) 0
+        (if (null (rest resto))
+            (/ (sqrt (first resto)) a)
+            (
+                let ((var (- (raised (first resto))(* 4 a (first (rest resto))))))
+                (unless (minusp var)(
+                    let((root(sqrt var)))
+                    (format t "x1 = ~$ ~%" (/(-(- (first resto))root)(* 2 a))) 
+                    (format t "x2 = ~$ ~%" (/(+(- (first resto))root)(* 2 a)))
+                ))
+            )
+        )
+    )
+)
 
 ;; 09 - Faca uma função que mostre um menu de operações sobre lista e retorne o item do menu escolhido
 (defun menu()
     (progn
-        (print "1. Item-1")
-        (print "2. Item-2")
-        (print "3. Item-3")
-        (read)
+        (print "0. Inserir")
+        (print "1. Buscar")
+        (print "2. Remover")
+        (print "3. Contar")
+        (print "4. Maior")
+        (print "5. Menor")
+        (write-line "")
+
+        (setq ans (read))
+        (cond
+            ((= ans 0) (print "Escolhido: Inserir"))
+            ((= ans 1) (print "Escolhido: Buscar"))
+            ((= ans 2) (print "Escolhido: Remover"))
+            ((= ans 3) (print "Escolhido: Contar"))
+            ((= ans 4) (print "Escolhido: Maior"))
+            ((= ans 5) (print "Escolhido: Menor"))
+        )
+    )
+)
+
+;; 10 - Faça uma função que usuário pode escolher se quer ver o menu ou já, de antemão, escolher a operação a ser executada sobre a lista. Se o primeiro argumento contiver o valor 0 (zero), mostra o menu e faz aleitura da operação a ser feita. Caso contrário, executa a operação necessária. Após o primeiroargumento, pode-se ter um número quaisquer de valores que comporão a entrada das operações do menu.
+(defun menu2 (&rest ans)
+    (if (null (first ans)) (menu)
+        (cond
+            ((= (first ans) 0) (print "Escolhido: Inserir"))
+            ((= (first ans) 1) (print "Escolhido: Buscar"))
+            ((= (first ans) 2) (print "Escolhido: Remover"))
+            ((= (first ans) 3) (print "Escolhido: Contar"))
+            ((= (first ans) 4) (print "Escolhido: Maior"))
+            ((= (first ans) 5) (print "Escolhido: Menor"))
+        )
     )
 )
 
 (defun raised (x)
     (* x x)
+)
+
+
+(defun size (Lista)
+    (if (null Lista) 0
+        (+ 1 (size (rest Lista)))
+    )
 )
